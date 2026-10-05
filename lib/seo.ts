@@ -6,8 +6,9 @@ export function siteGraph(): JsonLdNode[] {
   return [
     {
       "@type": "Person",
-      name: siteConfig.name,
+      name: siteConfig.person,
       jobTitle: siteConfig.role,
+      worksFor: { "@type": "Organization", name: siteConfig.name },
       email: siteConfig.email,
       url: siteConfig.url,
       image: `${siteConfig.url}/jakub.jpg`,
@@ -42,7 +43,7 @@ export function caseStudyJsonLd(project: { title: string; summary: string; slug:
         name: project.title,
         description: project.summary,
         url: `${siteConfig.url}/case-study/${project.slug}`,
-        creator: { "@type": "Person", name: siteConfig.name },
+        creator: { "@type": "Organization", name: siteConfig.name },
       },
     ],
   };

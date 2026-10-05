@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { useCommandMenu } from "@/components/layout/command-menu";
 import { StatusBadge } from "@/components/layout/status-badge";
+import { siteConfig } from "@/lib/site";
 
 const links = [
   { href: "/#oferta", label: "Oferta" },
@@ -21,8 +22,12 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
-        <Link href="/" className="text-base font-medium tracking-[-0.02em] text-on-ink" aria-label="Strona główna">
-          Jakub
+        <Link
+          href="/"
+          className="shrink-0 text-[15px] font-medium tracking-[-0.03em] text-on-ink sm:text-base"
+          aria-label="Strona główna"
+        >
+          {siteConfig.name}
         </Link>
         <nav aria-label="Sekcje" className="hidden items-center gap-5 md:flex">
           {links.map((link) => (

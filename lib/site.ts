@@ -1,7 +1,8 @@
 export const siteConfig = {
-  name: "Jakub",
+  name: "GrygielStudio",
+  person: "Jakub",
   role: "Strony, które zbierają zapytania",
-  title: "Jakub — strony, które tłumaczą ofertę i zbierają zapytania",
+  title: "GrygielStudio — strony, które tłumaczą ofertę i zbierają zapytania",
   description:
     "Projektuję strony dla firm: oferta na pierwszym ekranie, realizacje i prosta droga do kontaktu. Od wizytówki po sklep.",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "kontakt@jakub.dev",
