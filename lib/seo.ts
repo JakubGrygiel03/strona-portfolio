@@ -10,6 +10,7 @@ export function siteGraph(): JsonLdNode[] {
       jobTitle: siteConfig.role,
       email: siteConfig.email,
       url: siteConfig.url,
+      image: `${siteConfig.url}/jakub.jpg`,
       sameAs: [siteConfig.github, siteConfig.linkedin],
     },
     {
