@@ -1,0 +1,141 @@
+# Cursor Rules: High-End Developer Portfolio & Client Conversion Platform
+
+## 🎯 Wizja i Cel Projektu
+
+Strona to wizytówka inżyniera oprogramowania i web developera, której nadrzędnym celem jest **budowanie bezwzględnego zaufania klientów biznesowych (B2B, software houses, założyciele firm)** i konwersja odwiedzających w realne zlecenia.
+
+Interfejs i architektura muszą reprezentować poziom inżynierii znany z produktów takich jak **Vercel, Linear, Supabase czy Stripe**:
+- Zero generycznych szablonów i tanich komponentów.
+- Nienaganna typografia, precyzyjne mikromarginesy i subtelne, płynne mikrointerakcje.
+- Komunikacja oparta na faktach, twardych danych i architekturze rozwiązań, a nie pustych deklaracjach.
+
+---
+
+## 💎 Kluczowe Perełki Techniczne & UI (Feature Standard)
+
+Każdy wdrażany moduł musi oferować funkcjonalności wyróżniające projekt na tle przeciętnych portfolio:
+
+1. **Globalna paleta poleceń (`Cmd+K` / `Ctrl+K`):**
+   - Błyskawiczna nawigacja klawiaturą, szybkie filtrowanie projektów po technologiach, kopiowanie e-maila do schowka z powiadomieniem toast, bezpośrednie przejście do formularza briefu.
+2. **Dynamiczny przełącznik widoku projektu (Architecture & Scope Switcher):**
+   - Na kartach i podstronach projektów klient może jednym klikiem zmienić perspektywę:
+     - `Podgląd UI` (zrzuty/makiety wysokiej rozdzielczości z efektem tilt i powiększeniem),
+     - `Architektura & Stack` (diagram encji/bazy, użyte biblioteki, wzorce: Server Actions, ISR, cache),
+     - `Wpływ Biznesowy` (metryki ROI, konwersja, Core Web Vitals).
+3. **Interaktywny suwak "Przed / Po" (Before & After Slider):**
+   - Wizualne porównanie starej witryny klienta z nowym, zoptymalizowanym wdrożeniem Next.js.
+4. **Wskaźnik Live Performance & Trust Badges:**
+   - Prezentacja realnych metryk: Core Web Vitals (LCP < 1.0s, CLS 0, INP < 50ms), Lighthouse 100/100, gwarancje dostępności (SLA) i bezawaryjności.
+5. **Interaktywny Konfigurator Projektu (Scope & Cost Estimator):**
+   - Wielokrokowy estymator pozwalający klientowi określić typ projektu (Landing, E-commerce, Web App), wymagane moduły (baza danych, panel CMS, płatności, mailing) i generujący czytelny brief z orientacyjnym harmonogramem.
+6. **Dotykowy, dopracowany UX:**
+   - Magnetyczne przyciski CTA, subtelne rozmycia `backdrop-blur`, wskaźnik statusu dostępności (pulsująca zielona dioda LED "Available for projects").
+
+---
+
+## 🎨 Design System & Visual Tokens
+
+### Paleta Kolorów (Obsidian Tech Theme)
+- **Background Root:** `#07080B` (Głęboki obsydian, matowa czerń bez efektu wyblaknięcia)
+- **Surface / Card Base:** `#0F1117` z półprzezroczystym obrysem `border-white/[0.08]`
+- **Surface Hover / Highlight:** `#161922` z akcentem `border-white/[0.16]`
+- **Primary Tech Cobalt:** `#2563EB` (Tailwind `blue-600`) z poświatą `#3B82F6` (`blue-500`)
+- **Success & Availability:** `#10B981` (Emerald Tech – status dostępności, metryki wydajności)
+- **Typography - Headings:** `#F8FAFC` (Slate 50)
+- **Typography - Body:** `#94A3B8` (Slate 400)
+- **Typography - Muted & Data:** `#64748B` (Slate 500)
+
+### Typografia & Hierarchia
+- **Nagłówki i Teksty Główne:** `Geist Sans` lub `Inter` (wagi 500, 600, 700; tracking `-0.02em` dla nagłówków).
+- **Dane Techniczne, Badge, Liczniki, Kod:** `Geist Mono` lub `JetBrains Mono` (dodaje surowego, inżynieryjnego sznytu).
+
+---
+
+## 🛠️ Stack Technologiczny & Architektura
+
+- **Framework:** Next.js (App Router, React Server Components jako domyślne środowisko).
+- **Język:** TypeScript (Strict Mode, pełne typowanie interfejsów i odpowiedzi API).
+- **Styling:** Tailwind CSS + Radix UI Primitives / Shadcn UI.
+- **Animacje:** Framer Motion (płynne przejścia stanów, brak przeładowania zbędnymi efektami).
+- **Baza Danych & Backend:** Supabase (PostgreSQL, Row Level Security) do obsługi leadów i zapytań ofertowych.
+- **Obsługa Transakcyjna & E-mail:** Resend (powiadomienia o zapytaniach, automatyczny e-mail z podsumowaniem dla klienta).
+- **Walidacja Danych:** Zod + React Hook Form (ścisła walidacja po stronie klienta oraz w Server Actions).
+
+---
+
+## 🏗️ Zasady Czystego Kodu & Architektury (Engineering Standards)
+
+- **Podział Odpowiedzialności (Server vs Client):**
+  - Strony (`page.tsx`) oraz kontenery danych pozostają React Server Components.
+  - Dyrektywę `"use client"` stosuj wyłącznie na liściach drzewa komponentów wymagających interakcji (modale, formularze, interaktywne kalkulatory, `Cmd+K`).
+- **Granularność Modułów:**
+  - Maksymalna długość pliku: 100–180 linii kodu. Komponenty dziel na mniejsze, wyspecjalizowane cząstki.
+- **Bezpieczeństwo & Walidacja:**
+  - Każdy formularz i Server Action musi weryfikować payload schematem Zod.
+  - Zero surowych błędów przeglądarkowych (`alert()`, `console.error` rzucany użytkownikowi) – stosuj estetyczne toasty i wbudowane walidatory pól.
+- **Stany Ładowania i Dostępność (a11y):**
+  - Każdy dynamiczny element musi posiadać dedykowany szkielet ładowania (`Skeleton UI`).
+  - Wszystkie przyciski i ikony muszą posiadać odpowiednie atrybuty `aria-label` i pełną obsługę fokusu z klawiatury.
+
+---
+
+## 🤖 Rola i Zachowanie Asystenta AI (Cursor Persona)
+
+Działasz jako **Lead Software Architect & Senior Product Designer**:
+1. **Dbałość o Detale:** Zwracaj uwagę na subtelności wizualne – odpowiednie kontrasty, paddingi, promienie zaokrągleń (`rounded-xl` / `rounded-2xl`), czas trwania animacji (optymalnie 0.2s–0.3s).
+2. **Uzasadnienie Techniczne:** Proponując rozwiązanie lub pisząc kod, krótko wskaż, dlaczego dany wzorzec (np. Server Action, memoizacja, specyficzny indeks bazy) zapewnia przewagę wydajnościową i stabilność.
+3. **Czysty, Gotowy Kod:** Unikaj placeholderów typu `// do something here`. Pisz kompletny, w pełni otypowany kod spełniający standardy produkcyjne.
+
+---
+
+## 📂 Skalowalna Struktura Katalogów
+
+```plaintext
+├── app/
+│   ├── layout.tsx                     # Global Root Shell (Geist Sans/Mono, ThemeProvider, Toaster)
+│   ├── page.tsx                       # Strona główna (Hero -> Dynamic Projects -> Process -> Estimator -> Contact)
+│   ├── case-study/
+│   │   └── [slug]/
+│   │       ├── page.tsx               # Uniwersalny szablon Case Study dla dowolnego projektu
+│   │       └── opengraph-image.tsx    # Dynamiczny generator banerów Social Share dla danego projektu
+│   ├── wycena/
+│   │   └── page.tsx                   # Samodzielny, pełny konfigurator briefu projektowego
+│   ├── not-found.tsx                  # Precyzyjny 404 w stylu konsoli inżynieryjnej
+│   └── actions/
+│       ├── send-inquiry.ts            # Obsługa formularza: walidacja Zod -> Supabase -> mail Resend
+│       └── calculate-estimate.ts      # Logika kalkulatora wyceny
+├── components/
+│   ├── layout/
+│   │   ├── navbar.tsx                 # Sticky navigation, Command Menu trigger, status dostępności
+│   │   ├── footer.tsx                 # Dane kontaktowe, legal, odnośniki
+│   │   ├── command-menu.tsx           # Wyszukiwarka Cmd+K
+│   │   └── status-badge.tsx           # Dioda LED "Dostępny do wdrożeń"
+│   ├── sections/
+│   │   ├── hero.tsx                   # Główny nagłówek biznesowy + wskaźniki Lighthouse
+│   │   ├── project-grid.tsx           # Siatka projektów z automatycznym filtrowaniem
+│   │   ├── process-flow.tsx           # Oś czasu: 1. Brief -> 2. Prototyp -> 3. Kod -> 4. Gwarancja 30 dni
+│   │   ├── estimator-widget.tsx       # Interaktywny konfigurator budżetu i modułów
+│   │   └── contact-section.tsx        # Formularz z natychmiastowym feedbackiem
+│   ├── case-study/
+│   │   ├── before-after-slider.tsx    # Komponent porównania starej i nowej strony
+│   │   ├── architecture-flow.tsx      # Schemat integracji i bazy danych
+│   │   └── metric-counter.tsx         # Karta wskaźników ROI/Lighthouse
+│   └── ui/                            # Shadcn UI (Button, Dialog, Card, Badge, Skeleton itp.)
+├── content/
+│   └── projects/                      # REPOZYTORIUM PROJEKTÓW (Dodanie nowego pliku = nowy projekt na stronie)
+│       ├── index.ts                   # Export zbiorczy i funkcje pomocnicze (getProjectBySlug, getAllProjects)
+│       ├── trzy-wiatry.ts             # E-commerce rzemieślniczy, Supabase, P24
+│       ├── wedding-platform.ts        # Dedykowana aplikacja ślubna / RSVP
+│       ├── grygiel-gitara.ts          # Edukacja muzyczna & rezerwacje lekcji
+│       ├── the-medievals.ts           # Zespół muzyki dawnej, multimedia, rider
+│       ├── salon-fryzjerski.ts        # System rezerwacji wizyt, cennik, portfolio fryzur (gotowy szablon)
+│       └── fundacja.ts                # Moduł darowizn, działalność statutowa, transparentność (szablon)
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts                  # Klient publiczny do zapytań
+│   │   └── server.ts                  # Klient z uprawnieniami do Server Actions
+│   ├── resend.ts                      # Szablony i wysyłka e-maili
+│   └── utils.ts                       # Helpery cn(), formatowanie walut, liczniki
+└── types/
+    ├── project.ts                     # Precyzyjny interfejs projektu, metryk, architektury i kategorii
+    └── inquiry.ts                     # Typy zapytań ofertowych i briefu

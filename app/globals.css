@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme {
+  --color-obsidian: #f3f6f4;
+  --color-surface: #ffffff;
+  --color-surface-hover: #e8eeea;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #171717;
+  --color-on-ink: #ffffff;
+  --color-on-ink-muted: #a3a3a3;
+  --color-amber: #c4a265;
+  --color-cobalt: #1b4332;
+  --color-cobalt-glow: #143528;
+  --color-success: #1b4332;
+  --color-heading: #0a0a0a;
+  --color-body: #404040;
+  --color-muted: #5c5c5c;
+  --color-line: #e5e5e5;
+  --color-line-strong: #c8c8c8;
+  --color-on-accent: #ffffff;
+  --font-sans: var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --shadow-sm: 0 16px 40px -28px rgba(0, 0, 0, 0.45);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.75rem;
+  background: #f3f6f4;
+  overflow-x: clip;
+}
+
+body {
+  background: #f3f6f4;
+  color: #404040;
+  overflow-x: clip;
+}
+
+::selection {
+  background: #1b4332;
+  color: #ffffff;
+}
+
+input[type="range"] {
+  accent-color: #1b4332;
+}
+
+.hero-stage {
+  background-image:
+    radial-gradient(ellipse 42% 26% at 88% 0%, rgba(196, 162, 101, 0.16), transparent 58%),
+    radial-gradient(ellipse 50% 32% at 8% 0%, rgba(27, 67, 50, 0.55), transparent 62%);
+}
+
+.fine-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 70% 30%, black 15%, transparent 72%);
+}
+
+.page-grid {
+  background-image:
+    linear-gradient(to right, rgba(27, 67, 50, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 67, 50, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.tilt-surface {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transition: transform 180ms ease-out;
+  transform-style: preserve-3d;
+}
+
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 0%),
+    rgba(196, 162, 101, 0.22),
+    transparent 46%
+  );
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.tilt-surface:hover .tilt-glare {
+  opacity: 1;
+}
+
+.rise {
+  animation: rise 0.7s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .tilt-surface {
+    transform: none;
+    transition: none;
+  }
+
+  .tilt-glare,
+  .rise {
+    animation: none;
+    opacity: 1;
+  }
+
+  .tilt-glare {
+    display: none;
+  }
+}
