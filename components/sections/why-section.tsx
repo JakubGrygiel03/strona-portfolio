@@ -29,7 +29,7 @@ const points = [
   {
     gain: "Święty spokój w cenie",
     title: "30 dni wsparcia po starcie",
-    body: "Po uruchomieniu nie zostajesz sam. Przez pierwszy miesiąc jestem pod telefonem i na WhatsAppie. Literówka, nowy cennik albo podmiana zdjęcia — poprawiam to od ręki, bez dodatkowej opłaty.",
+    body: "Po uruchomieniu nie zostajesz sam. Przez pierwszy miesiąc jestem pod telefonem i na e-mailu. Literówka, nowy cennik albo podmiana zdjęcia — poprawiam to od ręki, bez dodatkowej opłaty.",
   },
 ];
 
@@ -42,7 +42,7 @@ const figures = [
 
 export function WhySection() {
   return (
-    <section id="zysk" className="border-y border-line bg-surface py-16">
+    <section id="zysk" className="border-y border-line bg-surface py-12">
       <div className="mx-auto max-w-6xl px-6">
         <div className="max-w-3xl" {...reveal()}>
           <p className="text-sm font-medium text-cobalt">Dlaczego warto</p>

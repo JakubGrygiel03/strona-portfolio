@@ -22,9 +22,6 @@ export function Footer() {
           <a href={siteConfig.phoneHref} className="mt-3 block text-sm text-on-ink hover:text-amber">
             {siteConfig.phoneDisplay}
           </a>
-          <a href={siteConfig.whatsapp} className="mt-2 block text-sm hover:text-on-ink" target="_blank" rel="noreferrer">
-            WhatsApp
-          </a>
           <a href={`mailto:${siteConfig.email}`} className="mt-2 block text-sm hover:text-on-ink">
             {siteConfig.email}
           </a>

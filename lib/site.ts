@@ -10,7 +10,6 @@ export const siteConfig = {
   phoneDisplay: "602 106 390",
   phoneHref: "tel:602106390",
   phoneE164: "+48602106390",
-  whatsapp: "https://wa.me/48602106390",
   location: "Gdańsk / Trójmiasto",
   area: "Cała Polska",
   github: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com",

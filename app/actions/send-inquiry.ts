@@ -37,6 +37,7 @@ export async function sendInquiry(input: unknown): Promise<InquiryActionResult> 
   const estimate = await calculateEstimate({
     projectType: fields.projectType,
     modules: fields.modules,
+    timeline: fields.timeline,
   });
   const record: InquiryRecord = { ...fields, estimate };
   const stored = await storeInquiry(record);

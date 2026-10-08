@@ -36,7 +36,7 @@ const groups: { title: string; icon: LucideIcon; lead: string; detail: string }[
 
 export function TechMatrix() {
   return (
-    <section id="stack" className="border-t border-line py-16">
+    <section id="stack" className="border-t border-line py-12">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="Zaplecze"

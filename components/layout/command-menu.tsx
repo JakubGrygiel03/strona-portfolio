@@ -148,16 +148,6 @@ function CommandMenu() {
               >
                 Zadzwoń: {siteConfig.phoneDisplay}
               </Command.Item>
-              <Command.Item
-                value="whatsapp"
-                onSelect={() => {
-                  setOpen(false);
-                  window.open(siteConfig.whatsapp, "_blank", "noopener,noreferrer");
-                }}
-                className="mt-1 cursor-pointer rounded-lg px-3 py-2 text-sm text-body data-[selected=true]:bg-surface-hover data-[selected=true]:text-heading"
-              >
-                Napisz na WhatsApp
-              </Command.Item>
             </Command.Group>
           </Command.List>
         </Command>

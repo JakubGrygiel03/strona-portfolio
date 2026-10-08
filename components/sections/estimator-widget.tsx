@@ -16,12 +16,12 @@ export function EstimatorWidget() {
   const addOns = moduleOptionsFor(brief.projectType);
 
   return (
-    <section id="wycena" className="border-t border-line py-16">
+    <section id="wycena" className="border-t border-line py-12">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="Wycena"
           title="Powiedz, co ma powstać."
-          description="Wybierz pakiet i dodatki. Kwota to suma ceny bazowej i zaznaczonych opcji. Ten sam wybór dołączy się do wiadomości."
+          description="Wybierz pakiet, dodatki i termin. Kwota to suma ceny bazowej i zaznaczonych opcji. Termin „jak najszybciej” jest ekspresem i jest dodatkowo płatny."
         />
         <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
           <div {...reveal()} className="rounded-2xl border border-line bg-surface p-5 sm:p-6">
@@ -73,6 +73,7 @@ export function EstimatorWidget() {
                   key={option.id}
                   pressed={brief.timeline === option.id}
                   label={option.label}
+                  detail={option.detail}
                   onClick={() => update({ timeline: option.id })}
                 />
               ))}

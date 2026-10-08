@@ -41,7 +41,7 @@ const points = [
 
 export function ValueCompare() {
   return (
-    <section id="porownanie" className="bg-obsidian py-16">
+    <section id="porownanie" className="bg-obsidian py-12">
       <div className="mx-auto max-w-6xl px-6">
         <p className="text-sm font-medium text-cobalt">Rachunek</p>
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.03em] text-heading sm:text-4xl">

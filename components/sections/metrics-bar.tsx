@@ -17,7 +17,7 @@ const notes = [
 
 export function MetricsBar() {
   return (
-    <section id="metryki" className="pb-16">
+    <section id="metryki" className="relative z-10 pb-12">
       <div className="mx-auto grid max-w-6xl gap-4 px-6 md:grid-cols-3">
         {notes.map((note, index) => (
           <TiltSurface key={note.title}>

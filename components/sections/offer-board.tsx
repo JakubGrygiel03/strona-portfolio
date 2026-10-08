@@ -72,7 +72,7 @@ function Points({ items }: { items: string[] }) {
 
 export function OfferBoard() {
   return (
-    <section id="oferta" className="bg-surface py-16">
+    <section id="oferta" className="bg-surface pb-10 pt-14">
       <div className="mx-auto max-w-6xl px-6">
         <div {...reveal()}>
           <p className="text-sm font-medium text-cobalt">Oferta</p>

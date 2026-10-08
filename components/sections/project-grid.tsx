@@ -39,7 +39,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
       : ` ${list.format(layouts.map((project) => name(project.title)))} to ${pluralForm(layouts.length, "gotowy układ", "gotowe układy", "gotowe układy")}, jeszcze bez własnego adresu.`;
 
   return (
-    <section id="projekty" className="page-grid py-16">
+    <section id="projekty" className="page-grid py-12">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="Realizacje"

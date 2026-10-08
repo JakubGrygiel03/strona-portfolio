@@ -33,7 +33,7 @@ const blocks = [
 
 export function ScopeSection() {
   return (
-    <section id="wspolpraca" className="py-16">
+    <section id="wspolpraca" className="py-12">
       <div className="mx-auto max-w-6xl px-6">
         <div {...reveal()}>
           <p className="text-sm font-medium text-cobalt">Zakres</p>

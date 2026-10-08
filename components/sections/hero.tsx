@@ -17,7 +17,7 @@ const proof = [
 
 export function Hero() {
   return (
-    <section className="relative">
+    <section className="relative z-10">
       <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-16 sm:pt-24">
         <p className="rise text-sm font-medium text-amber">Przyjmuję projekty na bieżący miesiąc</p>
         <h1
@@ -33,7 +33,7 @@ export function Hero() {
         </p>
         <div className="rise mt-10 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "240ms" }}>
           <Button asChild size="lg">
-            <Link href="/wycena">Wyceń swój projekt</Link>
+            <Link href="/#wycena">Wyceń swój projekt</Link>
           </Button>
           <Button
             asChild

@@ -44,7 +44,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="kontakt" className="bg-ink py-16">
+    <section id="kontakt" className="bg-ink py-12">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="max-w-xl" {...reveal()}>
           <p className="text-sm font-medium text-amber">Kontakt</p>
@@ -52,14 +52,11 @@ export function ContactSection() {
             Napisz, czego potrzebujesz.
           </h2>
           <p className="mt-4 text-base leading-7 text-on-ink-muted">
-            Do wiadomości dołączę pakiet i dodatki z kalkulatora. Możesz też zadzwonić albo napisać na WhatsApp.
+            Do wiadomości dołączę pakiet i dodatki z kalkulatora. Możesz też zadzwonić albo napisać na e-mail.
           </p>
           <div className="mt-6 flex flex-col gap-2 text-sm">
             <a href={siteConfig.phoneHref} className="text-on-ink hover:text-amber">
               {siteConfig.phoneDisplay}
-            </a>
-            <a href={siteConfig.whatsapp} className="text-on-ink-muted hover:text-on-ink" target="_blank" rel="noreferrer">
-              WhatsApp
             </a>
             <a href={`mailto:${siteConfig.email}`} className="text-on-ink-muted hover:text-on-ink">
               {siteConfig.email}
@@ -135,7 +132,8 @@ function briefSentence(brief: ReturnType<typeof useBrief>["brief"]) {
   const type = projectTypeOptions.find((option) => option.id === brief.projectType)?.label ?? "strona";
   const extras = brief.modules.map((id) => moduleLabel(id));
   const extraText = extras.length > 0 ? ` Dodatki: ${extras.join(", ")}.` : "";
-  return `Chodzi o: ${type}. Budżet ${budgetLabels[brief.budget]}, termin: ${timelineLabels[brief.timeline]}.${extraText}`;
+  const rush = brief.timeline === "asap" ? " Ekspres jest dodatkowo płatny." : "";
+  return `Chodzi o: ${type}. Budżet ${budgetLabels[brief.budget]}, termin: ${timelineLabels[brief.timeline]}.${extraText}${rush}`;
 }
 
 function Field({ label, error, children }: { label: string; error?: string; children: ReactNode }) {

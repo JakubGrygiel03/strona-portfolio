@@ -46,7 +46,7 @@ const notFor = [
 
 export function FitSection() {
   return (
-    <section id="dla-kogo" className="py-16">
+    <section id="dla-kogo" className="py-12">
       <div className="mx-auto grid max-w-6xl gap-6 px-6 md:grid-cols-2">
         <article {...reveal()} className="rounded-2xl bg-ink p-6 text-on-ink sm:p-8">
           <h2 className="text-2xl font-semibold tracking-[-0.02em]">Dla kogo</h2>

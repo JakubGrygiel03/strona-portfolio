@@ -27,11 +27,11 @@ export const budgetOptions: { id: BudgetRange; label: string }[] = [
   { id: "7000-plus", label: "powyżej 7 000 zł" },
 ];
 
-export const timelineOptions: { id: Timeline; label: string }[] = [
-  { id: "asap", label: "Jak najszybciej" },
-  { id: "1-2m", label: "1–2 miesiące" },
-  { id: "quarter", label: "Ten kwartał" },
-  { id: "flexible", label: "Elastycznie" },
+export const timelineOptions: { id: Timeline; label: string; detail: string }[] = [
+  { id: "asap", label: "Jak najszybciej", detail: "Ekspres · dopłata 25%" },
+  { id: "1-2m", label: "1–2 miesiące", detail: "Termin standardowy, bez dopłaty" },
+  { id: "quarter", label: "Ten kwartał", detail: "Termin standardowy, bez dopłaty" },
+  { id: "flexible", label: "Elastycznie", detail: "Termin standardowy, bez dopłaty" },
 ];
 
 export const budgetLabels = Object.fromEntries(budgetOptions.map((item) => [item.id, item.label])) as Record<

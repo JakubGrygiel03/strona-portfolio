@@ -21,7 +21,7 @@ const points = [
 
 export function AboutSection() {
   return (
-    <section id="o-mnie" className="bg-surface py-16">
+    <section id="o-mnie" className="bg-surface py-12">
       <div className="mx-auto grid max-w-6xl items-start gap-8 px-6 md:grid-cols-[16rem_1fr] md:gap-12">
         <img
           src="/jakub.webp"

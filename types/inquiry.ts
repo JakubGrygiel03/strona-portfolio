@@ -15,6 +15,7 @@ export type InquiryModule = AddOnId;
 export interface EstimateInput {
   projectType: ProjectType;
   modules: InquiryModule[];
+  timeline?: Timeline;
 }
 
 export interface EstimateResult {
@@ -25,6 +26,9 @@ export interface EstimateResult {
   stack: string[];
   included: string[];
   label: string;
+  rush: boolean;
+  rushFeeMin: number;
+  rushFeeMax: number;
 }
 
 export interface InquiryInput extends EstimateInput {

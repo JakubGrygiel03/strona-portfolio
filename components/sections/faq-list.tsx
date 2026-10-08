@@ -21,7 +21,7 @@ const questions = [
 
 export function FaqList() {
   return (
-    <section id="pytania" className="bg-surface py-16">
+    <section id="pytania" className="bg-surface py-12">
       <div className="mx-auto max-w-3xl px-6">
         <div {...reveal()}>
           <p className="text-sm font-medium text-cobalt">Pytania</p>

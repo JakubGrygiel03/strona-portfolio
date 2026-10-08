@@ -14,7 +14,7 @@ export function RevealOnView() {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.16, rootMargin: "0px 0px -10% 0px" },
+      { threshold: 0.08, rootMargin: "0px 0px -6% 0px" },
     );
 
     function show(node: Element) {
@@ -30,7 +30,7 @@ export function RevealOnView() {
         return;
       }
       const box = node.getBoundingClientRect();
-      const inView = box.height > 0 && box.top < window.innerHeight * 0.86 && box.bottom > 32;
+      const inView = box.height > 0 && box.top < window.innerHeight * 0.92 && box.bottom > 24;
       if (inView) show(node);
       else observer.observe(node);
     }
@@ -42,37 +42,22 @@ export function RevealOnView() {
 
     const changes = new MutationObserver((records) => {
       for (const record of records) {
-        if (record.type === "attributes" && record.target instanceof HTMLElement) {
-          if (shown.has(record.target)) record.target.classList.add("is-in");
-          continue;
-        }
         for (const node of record.addedNodes) {
           if (node instanceof HTMLElement) scan(node);
         }
       }
     });
 
-    const boot = window.setTimeout(() => {
-      document.documentElement.dataset.motion = "1";
-      scan(document.body);
-      changes.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-    }, 40);
+    document.documentElement.dataset.motion = "1";
+    scan(document.body);
+    changes.observe(document.body, { childList: true, subtree: true });
 
+    // Awaryjnie odsłoń wszystko, co mogło zostać niewidoczne.
     const safety = window.setTimeout(() => {
-      document.querySelectorAll("[data-reveal]:not(.is-in)").forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
-        const box = node.getBoundingClientRect();
-        if (box.height > 0 && box.top < window.innerHeight && box.bottom > 0) show(node);
-      });
-    }, 1000);
+      document.querySelectorAll("[data-reveal]:not(.is-in)").forEach(show);
+    }, 1200);
 
     return () => {
-      window.clearTimeout(boot);
       window.clearTimeout(safety);
       observer.disconnect();
       changes.disconnect();

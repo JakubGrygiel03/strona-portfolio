@@ -4,7 +4,7 @@ const guarantees = [
   {
     title: "30 dni gwarancji i wsparcia w cenie każdego wdrożenia",
     detail:
-      "Jestem pod telefonem lub na WhatsAppie. Jeśli cokolwiek wymaga drobnej korekty, poprawki tekstu czy upewnienia się, że wszystko gra — pomagam od ręki w ramach dobrej relacji.",
+      "Jestem pod telefonem albo na e-mailu. Jeśli cokolwiek wymaga drobnej korekty, poprawki tekstu czy upewnienia się, że wszystko gra — pomagam od ręki w ramach dobrej relacji.",
   },
   {
     title: "Darmowe utrzymanie w chmurze",
@@ -38,7 +38,7 @@ const plans = [
 
 export function CarePlans() {
   return (
-    <section id="opieka" className="bg-obsidian py-16">
+    <section id="opieka" className="bg-obsidian py-12">
       <div className="mx-auto max-w-6xl px-6">
         <div {...reveal()}>
           <p className="text-sm font-medium text-cobalt">Po starcie</p>

@@ -1,3 +1,6 @@
+/** Dopłata za termin „jak najszybciej”. Krótszy czas, wyższa kwota. */
+export const expressRate = 0.25;
+
 export const packageIds = ["one-page", "cms-booking", "shop-platform"] as const;
 export type PackageId = (typeof packageIds)[number];
 

@@ -94,8 +94,12 @@ input[type="range"] {
   opacity: 1;
 }
 
+/*
+ * `backwards` trzyma stan startowy tylko w delay.
+ * Bez `both`/`forwards` — po końcu albo przerwaniu wraca do opacity: 1.
+ */
 .rise {
-  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 @keyframes rise {
@@ -110,7 +114,21 @@ input[type="range"] {
 }
 
 .swap-in {
-  animation: rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Domyślnie widoczne. Animacja tylko gdy JS oznaczy ruch i klasę is-in. */
+html.js[data-motion="1"] [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+html.js[data-motion="1"] [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
 }
 
 .faq-answer {
@@ -139,7 +157,9 @@ details[open] .faq-answer {
 
   .tilt-glare,
   .rise,
-  .swap-in {
+  .swap-in,
+  html.js[data-motion="1"] [data-reveal]:not(.is-in),
+  html.js[data-motion="1"] [data-reveal].is-in {
     animation: none;
     opacity: 1;
     transform: none;

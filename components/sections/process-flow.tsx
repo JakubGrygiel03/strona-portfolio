@@ -32,7 +32,7 @@ const steps = [
 
 export function ProcessFlow() {
   return (
-    <section id="proces" className="bg-obsidian py-16">
+    <section id="proces" className="bg-obsidian py-12">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="Współpraca"

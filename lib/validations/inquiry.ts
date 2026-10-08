@@ -11,6 +11,7 @@ const modulesField = z.array(moduleSchema).max(moduleSchema.options.length);
 export const estimateInputSchema = z.object({
   projectType: projectTypeSchema,
   modules: modulesField,
+  timeline: timelineSchema.optional(),
 });
 
 export const contactFieldsSchema = z.object({

@@ -17,6 +17,11 @@ export function EstimatorSummary({ brief }: { brief: BriefSelection }) {
       <div key={figureKey} className="swap-in mt-2" aria-live="polite">
         <p className="text-3xl font-semibold tracking-[-0.03em] text-heading">{days}</p>
         <p className="mt-2 text-sm text-body">{price}</p>
+        {estimate.rush ? (
+          <p className="mt-2 text-sm text-heading">
+            W tym dopłata za ekspres: {formatPln(estimate.rushFeeMin)} – {formatPln(estimate.rushFeeMax)}
+          </p>
+        ) : null}
       </div>
       <h3 className="mt-6 text-sm font-medium text-heading">W cenie pakietu</h3>
       <ul key={estimate.included.join("|")} className="swap-in mt-3 flex flex-wrap gap-2">
@@ -37,8 +42,9 @@ export function EstimatorSummary({ brief }: { brief: BriefSelection }) {
         </div>
       ) : null}
       <p className="mt-6 text-xs leading-5 text-muted">
-        To suma pakietu i dodatków, nie ostateczna cena. Dokładną podaję po rozmowie. Maile z potwierdzeniami są w
-        cenie, bez dopłaty za SMS i bez fakturowania po stronie strony.
+        To suma pakietu, dodatków i — przy terminie „jak najszybciej” — dopłaty za ekspres. Pozostałe terminy są bez
+        dopłaty. Dokładną kwotę podaję po rozmowie. Maile z potwierdzeniami są w cenie, bez dopłaty za SMS i bez
+        fakturowania po stronie strony.
       </p>
     </aside>
   );
