@@ -5,9 +5,9 @@ export function MobileCta() {
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink p-3 md:hidden">
       <Link
         href="/wycena"
-        className="flex h-12 items-center justify-center rounded-xl bg-cobalt text-sm font-medium text-on-accent"
+        className="flex h-12 items-center justify-center rounded-xl bg-cobalt text-sm font-medium text-on-accent transition-transform duration-200 active:scale-95"
       >
-        Umów wycenę
+        Wyceń swój projekt
       </Link>
     </div>
   );

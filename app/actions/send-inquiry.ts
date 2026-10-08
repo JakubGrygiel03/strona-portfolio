@@ -1,23 +1,44 @@
 "use server";
 
+import { headers } from "next/headers";
+import { z } from "zod";
 import { calculateEstimate } from "@/app/actions/calculate-estimate";
+import { allowInquiry } from "@/lib/rate-limit";
 import { sendInquiryEmail } from "@/lib/resend";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { inquirySchema } from "@/lib/validations/inquiry";
 import type { InquiryActionResult, InquiryRecord } from "@/types/inquiry";
 
+const incomingSchema = inquirySchema.extend({
+  website: z.string().max(200).optional(),
+});
+
 export async function sendInquiry(input: unknown): Promise<InquiryActionResult> {
-  const parsed = inquirySchema.safeParse(input);
+  const requestHeaders = await headers();
+  const ip = requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  if (!allowInquiry(ip)) {
+    return { ok: false, message: "Za dużo wiadomości naraz. Spróbuj za kilka minut albo napisz e-mail." };
+  }
+
+  const parsed = incomingSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: "Sprawdź pola formularza i spróbuj ponownie." };
   }
 
+  if (parsed.data.website?.trim()) {
+    return { ok: true, delivery: "logged" };
+  }
+
+  parsed.data.name = oneLine(parsed.data.name);
+  parsed.data.company = oneLine(parsed.data.company);
+  parsed.data.email = oneLine(parsed.data.email);
+
+  const { website: _trap, ...fields } = parsed.data;
   const estimate = await calculateEstimate({
-    projectType: parsed.data.projectType,
-    modules: parsed.data.modules,
-    scope: parsed.data.scope,
+    projectType: fields.projectType,
+    modules: fields.modules,
   });
-  const record: InquiryRecord = { ...parsed.data, estimate };
+  const record: InquiryRecord = { ...fields, estimate };
   const stored = await storeInquiry(record);
   const mailed = await sendInquiryEmail(record);
 
@@ -33,7 +54,7 @@ export async function sendInquiry(input: unknown): Promise<InquiryActionResult> 
       company: record.company,
       email: record.email,
       projectType: record.projectType,
-      weeks: `${estimate.weeksMin}-${estimate.weeksMax}`,
+      days: `${estimate.daysMin}-${estimate.daysMax}`,
     });
     return { ok: true, delivery: "logged" };
   }
@@ -54,7 +75,6 @@ async function storeInquiry(record: InquiryRecord): Promise<boolean> {
     budget: record.budget,
     timeline: record.timeline,
     modules: record.modules,
-    scope: record.scope,
     estimate: record.estimate,
   });
 
@@ -64,4 +84,8 @@ async function storeInquiry(record: InquiryRecord): Promise<boolean> {
   }
 
   return true;
+}
+
+function oneLine(value: string) {
+  return value.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim();
 }

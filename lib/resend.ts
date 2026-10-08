@@ -1,50 +1,73 @@
 import { Resend } from "resend";
-import { budgetLabels, timelineLabels } from "@/lib/brief-copy";
-import { formatPln } from "@/lib/utils";
+import { budgetLabels, moduleLabel, timelineLabels } from "@/lib/brief-copy";
+import { daysLabel, formatPln } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
 import type { InquiryRecord } from "@/types/inquiry";
 
 export async function sendInquiryEmail(
   record: InquiryRecord,
 ): Promise<{ sent: boolean; reason?: "missing-key" | "error" }> {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) return { sent: false, reason: "missing-key" };
 
   const resend = new Resend(apiKey);
+  const from = process.env.RESEND_FROM_EMAIL?.trim() || "GrygielStudio <onboarding@resend.dev>";
+  const to = process.env.INQUIRY_TO_EMAIL?.trim() || siteConfig.email;
+  const modules =
+    record.modules.length > 0 ? record.modules.map((id) => moduleLabel(id)).join(", ") : "bez dodatków";
+  const company = record.company.trim() || "osoba prywatna";
+  const range = `${daysLabel(record.estimate.daysMin, record.estimate.daysMax)}, ${formatPln(record.estimate.costMin)} – ${formatPln(record.estimate.costMax)}`;
+
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>",
-    to: process.env.INQUIRY_TO_EMAIL ?? siteConfig.email,
+    from,
+    to,
     replyTo: record.email,
-    subject: `Brief: ${record.company} — ${record.estimate.label}`,
+    subject: `Brief: ${company} — ${record.estimate.label}`,
     text: [
       `Imię: ${record.name}`,
-      `Firma: ${record.company}`,
+      `Firma: ${company}`,
       `E-mail: ${record.email}`,
-      `Typ: ${record.estimate.label}`,
+      `Pakiet: ${record.estimate.label}`,
+      `Dodatki: ${modules}`,
+      `W cenie: ${record.estimate.included.join(", ")}`,
       `Budżet klienta: ${budgetLabels[record.budget]}`,
       `Termin: ${timelineLabels[record.timeline]}`,
-      `Moduły: ${record.modules.join(", ") || "brak"}`,
-      `Zakres: ${record.scope}/3`,
-      `Szacunek: ${record.estimate.weeksMin}–${record.estimate.weeksMax} tyg., ${formatPln(record.estimate.costMin)} – ${formatPln(record.estimate.costMax)}`,
+      `Szacunek: ${range}`,
       "",
       record.message,
     ].join("\n"),
   });
 
-  if (error) return { sent: false, reason: "error" };
+  if (error) {
+    console.error("Resend inquiry mail failed", error.message);
+    return { sent: false, reason: "error" };
+  }
 
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>",
+  const confirmation = [
+    "Cześć!",
+    "",
+    "Dzięki za kontakt i przesłanie wstępnej konfiguracji.",
+    "",
+    "Poniżej podsumowanie tego, co zaznaczyłeś w kalkulatorze:",
+    `Pakiet: ${record.estimate.label}`,
+    `Dodatki: ${modules}`,
+    `Orientacyjnie: ${range}`,
+    "",
+    "Przejrzę to i odezwę się do Ciebie osobiście w ciągu 24h na telefon lub maila, żeby na spokojnie porozmawiać.",
+    "",
+    "– Jakub",
+  ].join("\n");
+
+  const confirmationResult = await resend.emails.send({
+    from,
     to: record.email,
-    subject: "Dostałem brief",
-    text: [
-      `${record.name}, dziękuję za wiadomość.`,
-      `Chodzi o: ${record.estimate.label}.`,
-      `Termin, o którym piszesz: ${timelineLabels[record.timeline]}. Budżet: ${budgetLabels[record.budget]}.`,
-      `Orientacyjnie: ${record.estimate.weeksMin}–${record.estimate.weeksMax} tyg., ${formatPln(record.estimate.costMin)} – ${formatPln(record.estimate.costMax)}.`,
-      "Końcową wycenę potwierdzę po rozmowie. Odezwę się na ten adres.",
-    ].join("\n"),
+    subject: "Dostałem Twoją konfigurację — odezwę się w ciągu 24h",
+    text: confirmation,
   });
+
+  if (confirmationResult.error) {
+    console.error("Resend confirmation failed", confirmationResult.error.message);
+  }
 
   return { sent: true };
 }

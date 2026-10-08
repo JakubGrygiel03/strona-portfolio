@@ -1,27 +1,29 @@
-export const projectTypes = ["landing", "ecommerce", "web-app", "service"] as const;
-export type ProjectType = (typeof projectTypes)[number];
+import { addOnIds, packageIds, type AddOnId, type PackageId } from "@/lib/estimator-data";
 
-export const budgetRanges = ["do-10", "10-25", "25-50", "50-plus"] as const;
+export const projectTypes = packageIds;
+export type ProjectType = PackageId;
+
+export const budgetRanges = ["do-1500", "1500-3500", "3500-7000", "7000-plus"] as const;
 export type BudgetRange = (typeof budgetRanges)[number];
 
 export const timelines = ["asap", "1-2m", "quarter", "flexible"] as const;
 export type Timeline = (typeof timelines)[number];
 
-export const inquiryModules = ["payments", "cms", "booking", "blog", "mailing"] as const;
-export type InquiryModule = (typeof inquiryModules)[number];
+export const inquiryModules = addOnIds;
+export type InquiryModule = AddOnId;
 
 export interface EstimateInput {
   projectType: ProjectType;
   modules: InquiryModule[];
-  scope: 1 | 2 | 3;
 }
 
 export interface EstimateResult {
-  weeksMin: number;
-  weeksMax: number;
+  daysMin: number;
+  daysMax: number;
   costMin: number;
   costMax: number;
   stack: string[];
+  included: string[];
   label: string;
 }
 

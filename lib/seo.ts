@@ -1,27 +1,59 @@
+import { packages } from "@/lib/estimator-data";
 import { siteConfig } from "@/lib/site";
 
 type JsonLdNode = Record<string, unknown>;
+
+function postalAddress(): JsonLdNode {
+  return {
+    "@type": "PostalAddress",
+    addressLocality: "Gdańsk",
+    addressRegion: "Pomorskie",
+    addressCountry: "PL",
+  };
+}
 
 export function siteGraph(): JsonLdNode[] {
   return [
     {
       "@type": "Person",
       name: siteConfig.person,
-      jobTitle: siteConfig.role,
+      jobTitle: "Twórca stron internetowych",
       worksFor: { "@type": "Organization", name: siteConfig.name },
       email: siteConfig.email,
+      telephone: siteConfig.phoneE164,
       url: siteConfig.url,
-      image: `${siteConfig.url}/jakub.jpg`,
-      sameAs: [siteConfig.github, siteConfig.linkedin],
+      image: `${siteConfig.url}/jakub.webp`,
+      address: postalAddress(),
+      sameAs: [siteConfig.github, siteConfig.linkedin].filter(Boolean),
     },
     {
       "@type": "ProfessionalService",
-      name: `${siteConfig.name} — ${siteConfig.role}`,
+      name: siteConfig.name,
       description: siteConfig.description,
       url: siteConfig.url,
       email: siteConfig.email,
-      areaServed: "PL",
-      serviceType: "Strony i aplikacje dla firm",
+      telephone: siteConfig.phoneE164,
+      image: `${siteConfig.url}/jakub.webp`,
+      priceRange: "850–6500 PLN",
+      address: postalAddress(),
+      areaServed: { "@type": "Country", name: "Polska" },
+      founder: { "@type": "Person", name: siteConfig.person },
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Wdrożenia stron",
+        itemListElement: packages.map((item) => ({
+          "@type": "Offer",
+          name: item.name,
+          description: item.included.join(", "),
+          priceCurrency: "PLN",
+          priceSpecification: {
+            "@type": "PriceSpecification",
+            minPrice: item.priceMin,
+            maxPrice: item.priceMax,
+            priceCurrency: "PLN",
+          },
+        })),
+      },
     },
   ];
 }

@@ -6,6 +6,7 @@ import { MobileCta } from "@/components/layout/mobile-cta";
 import { Navbar } from "@/components/layout/navbar";
 import { Providers } from "@/components/layout/providers";
 import { JsonLd } from "@/components/seo/json-ld";
+import { bootScript } from "@/lib/boot-script";
 import { siteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -34,19 +35,24 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     statusBarStyle: "black-translucent",
   },
-  icons: {
-    icon: [
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
   title: {
     default: siteConfig.title,
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
   authors: [{ name: siteConfig.person, url: siteConfig.url }],
+  creator: siteConfig.person,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "pl_PL",
@@ -64,8 +70,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pl" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="pl" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full bg-obsidian font-sans text-body">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: bootScript,
+          }}
+        />
         <JsonLd data={siteJsonLd()} />
         <Providers>
           <a

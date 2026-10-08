@@ -4,17 +4,18 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { ArchitectureFlow } from "@/components/case-study/architecture-flow";
 import { BeforeAfterSlider } from "@/components/case-study/before-after-slider";
 import { MetricCounter } from "@/components/case-study/metric-counter";
+import { reveal } from "@/lib/reveal";
 import type { Project } from "@/types/project";
 
 const triggers = [
-  { value: "ui", label: "Jak to wygląda" },
+  { value: "ui", label: "Wcześniej i teraz" },
   { value: "architecture", label: "Jak to działa" },
   { value: "impact", label: "Co z tego wynikło" },
 ];
 
 export function ProjectViewSwitcher({ project }: { project: Project }) {
   return (
-    <Tabs.Root defaultValue="ui" className="mt-10">
+    <Tabs.Root defaultValue="ui" className="mt-10" {...reveal()}>
       <Tabs.List className="flex flex-wrap gap-2" aria-label="Perspektywa projektu">
         {triggers.map((trigger) => (
           <Tabs.Trigger

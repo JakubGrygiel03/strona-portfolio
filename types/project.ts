@@ -43,6 +43,11 @@ export interface BeforeAfter {
   afterPoints: string[];
 }
 
+export interface ProjectOutcome {
+  title: string;
+  body: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -50,8 +55,14 @@ export interface Project {
   category: ProjectCategory;
   stage: ProjectStage;
   summary: string;
+  eyebrow?: string;
+  headline?: string;
+  lead?: string;
+  benefits?: string[];
   challenge: string;
+  challengePoints?: string[];
   solution: string;
+  outcomes?: ProjectOutcome[];
   featured: boolean;
   year: string;
   cover?: string;

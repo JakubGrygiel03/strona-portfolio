@@ -1,4 +1,3 @@
-import { fundacja } from "@/content/projects/fundacja";
 import { grygielGitara } from "@/content/projects/grygiel-gitara";
 import { salonFryzjerski } from "@/content/projects/salon-fryzjerski";
 import { theMedievals } from "@/content/projects/the-medievals";
@@ -12,7 +11,6 @@ const projects: Project[] = [
   grygielGitara,
   theMedievals,
   salonFryzjerski,
-  fundacja,
 ];
 
 export function getAllProjects(): Project[] {

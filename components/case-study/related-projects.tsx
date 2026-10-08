@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getFeaturedProjects } from "@/content/projects";
+import { reveal } from "@/lib/reveal";
 
 export function RelatedProjects({ currentSlug }: { currentSlug: string }) {
   const related = getFeaturedProjects()
@@ -9,7 +10,7 @@ export function RelatedProjects({ currentSlug }: { currentSlug: string }) {
   if (related.length === 0) return null;
 
   return (
-    <aside className="mt-16 border-t border-line pt-10">
+    <aside className="mt-16 border-t border-line pt-10" {...reveal()}>
       <h2 className="text-sm font-medium text-heading">Inne historie</h2>
       <ul className="mt-4 grid gap-3 sm:grid-cols-3">
         {related.map((project) => (

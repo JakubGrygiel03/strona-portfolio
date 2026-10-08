@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/sections/project-card";
 import { SectionHeading } from "@/components/sections/section-heading";
-import { pluralProjects } from "@/lib/utils";
+import { reveal } from "@/lib/reveal";
+import { pluralForm, pluralProjects } from "@/lib/utils";
 import { categoryLabels, projectCategories, type Project, type ProjectCategory } from "@/types/project";
 
 type FilterId = "all" | ProjectCategory;
@@ -22,6 +23,20 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
     [projects],
   );
   const visible = active === "all" ? projects : projects.filter((project) => project.category === active);
+  const linked = projects.filter((project) => project.siteUrl);
+  const unlinked = projects.filter((project) => project.stage === "live" && !project.siteUrl);
+  const layouts = projects.filter((project) => project.stage === "blueprint");
+  const list = new Intl.ListFormat("pl", { type: "conjunction" });
+  const name = (title: string) => title.split(" — ")[0] ?? title;
+  const liveSentence = `${linked.length} ${pluralForm(linked.length, "strona jest", "strony są", "stron jest")} pod własnym adresem.`;
+  const unlinkedSentence =
+    unlinked.length === 0
+      ? ""
+      : ` ${list.format(unlinked.map((project) => name(project.title)))} ${unlinked.length === 1 ? "jest opisana" : "są opisane"} tutaj, bez publicznego adresu.`;
+  const layoutSentence =
+    layouts.length === 0
+      ? ""
+      : ` ${list.format(layouts.map((project) => name(project.title)))} to ${pluralForm(layouts.length, "gotowy układ", "gotowe układy", "gotowe układy")}, jeszcze bez własnego adresu.`;
 
   return (
     <section id="projekty" className="page-grid py-16">
@@ -29,9 +44,9 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
         <SectionHeading
           eyebrow="Realizacje"
           title="Realizacje, które da się otworzyć i przeczytać."
-          description="Cztery strony już stoją pod własnym adresem. Salon i fundacja to gotowe układy, bez cudzej domeny."
+          description={`${liveSentence}${unlinkedSentence}${layoutSentence}`}
         />
-        <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filtr kategorii">
+        <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filtr kategorii" {...reveal(80)}>
           {filters.map((filter) => (
             <button
               key={filter.id}
@@ -59,12 +74,34 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
               <ProjectCard
                 key={project.slug}
                 project={project}
-                featured={active === "all" && index === 0 && project.featured}
+                revealDelay={Math.min(index, 5) * 70}
               />
             ))}
+            {visible.length % 2 === 1 ? <NextSiteSlot /> : null}
           </div>
         )}
       </div>
     </section>
+  );
+}
+
+function NextSiteSlot() {
+  return (
+    <article
+      className="hidden h-full flex-col justify-center rounded-2xl border-2 border-dashed border-[#8a8a8a] bg-surface px-8 py-10 md:flex"
+      {...reveal(200)}
+    >
+      <p className="text-xs font-medium tracking-[0.04em] text-muted uppercase">Następna realizacja</p>
+      <h3 className="mt-3 max-w-xs text-xl font-semibold tracking-[-0.03em] text-heading">Kolejna strona powstaje.</h3>
+      <p className="mt-3 max-w-sm text-sm leading-6 text-body">
+        To miejsce czeka na następną stronę. Jak Twoja ma zacząć pracować, napisz.
+      </p>
+      <a
+        href="#kontakt"
+        className="mt-6 w-fit rounded-md text-sm font-medium text-cobalt underline decoration-cobalt/40 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt"
+      >
+        Napisz
+      </a>
+    </article>
   );
 }

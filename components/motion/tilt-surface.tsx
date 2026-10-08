@@ -1,9 +1,20 @@
 "use client";
 
 import { useRef, type PointerEvent, type ReactNode } from "react";
+import { reveal } from "@/lib/reveal";
 import { cn } from "@/lib/utils";
 
-export function TiltSurface({ children, className }: { children: ReactNode; className?: string }) {
+export function TiltSurface({
+  children,
+  className,
+  frameClassName,
+  revealDelay,
+}: {
+  children: ReactNode;
+  className?: string;
+  frameClassName?: string;
+  revealDelay?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   function move(event: PointerEvent<HTMLDivElement>) {
@@ -27,8 +38,16 @@ export function TiltSurface({ children, className }: { children: ReactNode; clas
   }
 
   return (
-    <div className={cn("h-full [perspective:1100px]", className)}>
-      <div ref={ref} onPointerMove={move} onPointerLeave={leave} className="tilt-surface h-full overflow-hidden rounded-2xl">
+    <div
+      className={cn("h-full [perspective:1100px]", className)}
+      {...(revealDelay === undefined ? {} : reveal(revealDelay))}
+    >
+      <div
+        ref={ref}
+        onPointerMove={move}
+        onPointerLeave={leave}
+        className={cn("tilt-surface h-full overflow-hidden rounded-2xl", frameClassName)}
+      >
         {children}
         <span aria-hidden="true" className="tilt-glare" />
       </div>

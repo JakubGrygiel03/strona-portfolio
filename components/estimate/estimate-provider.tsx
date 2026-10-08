@@ -1,22 +1,21 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { packageById } from "@/lib/estimator-data";
 import type { BudgetRange, InquiryModule, ProjectType, Timeline } from "@/types/inquiry";
 
 export interface BriefSelection {
   projectType: ProjectType;
   modules: InquiryModule[];
-  scope: 1 | 2 | 3;
   budget: BudgetRange;
   timeline: Timeline;
 }
 
 const defaultBrief: BriefSelection = {
-  projectType: "web-app",
-  modules: ["cms"],
-  scope: 2,
-  budget: "25-50",
-  timeline: "quarter",
+  projectType: "one-page",
+  modules: [],
+  budget: "do-1500",
+  timeline: "flexible",
 };
 
 interface BriefContextValue {
@@ -29,17 +28,31 @@ const BriefContext = createContext<BriefContextValue | null>(null);
 
 export function EstimateProvider({ children }: { children: ReactNode }) {
   const [brief, setBrief] = useState<BriefSelection>(defaultBrief);
+
   const update = useCallback((patch: Partial<BriefSelection>) => {
-    setBrief((current) => ({ ...current, ...patch }));
+    setBrief((current) => {
+      const next = { ...current, ...patch };
+      if (patch.projectType) {
+        const allowed = new Set(packageById(patch.projectType).allowedAddOnIds);
+        next.modules = next.modules.filter((id) => allowed.has(id));
+      }
+      return next;
+    });
   }, []);
+
   const toggleModule = useCallback((moduleId: InquiryModule) => {
-    setBrief((current) => ({
-      ...current,
-      modules: current.modules.includes(moduleId)
-        ? current.modules.filter((item) => item !== moduleId)
-        : [...current.modules, moduleId],
-    }));
+    setBrief((current) => {
+      const allowed = packageById(current.projectType).allowedAddOnIds;
+      if (!allowed.includes(moduleId)) return current;
+      return {
+        ...current,
+        modules: current.modules.includes(moduleId)
+          ? current.modules.filter((item) => item !== moduleId)
+          : [...current.modules, moduleId],
+      };
+    });
   }, []);
+
   const value = useMemo(() => ({ brief, update, toggleModule }), [brief, update, toggleModule]);
 
   return <BriefContext.Provider value={value}>{children}</BriefContext.Provider>;

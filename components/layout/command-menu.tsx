@@ -17,14 +17,17 @@ const CommandMenuContext = createContext<CommandMenuContextValue | null>(null);
 
 const navigation = [
   { href: "/", label: "Start" },
+  { href: "/#porownanie", label: "Dlaczego nie szablon" },
+  { href: "/#zysk", label: "Dlaczego warto" },
   { href: "/#oferta", label: "Oferta" },
   { href: "/#projekty", label: "Realizacje" },
   { href: "/#o-mnie", label: "O mnie" },
   { href: "/#proces", label: "Proces" },
-  { href: "/#wspolpraca", label: "Współpraca" },
+  { href: "/#wspolpraca", label: "Zakres" },
+  { href: "/#opieka", label: "Opieka" },
   { href: "/#pytania", label: "Pytania" },
   { href: "/#stack", label: "Zaplecze" },
-  { href: "/wycena", label: "Wycena" },
+  { href: "/#wycena", label: "Wycena" },
   { href: "/#kontakt", label: "Kontakt" },
 ];
 
@@ -130,10 +133,30 @@ function CommandMenu() {
               </Command.Item>
               <Command.Item
                 value="przejdz do wyceny brief"
-                onSelect={() => go("/wycena")}
+                onSelect={() => go("/#wycena")}
                 className="mt-1 cursor-pointer rounded-lg px-3 py-2 text-sm text-body data-[selected=true]:bg-surface-hover data-[selected=true]:text-heading"
               >
                 Przejdź do wyceny
+              </Command.Item>
+              <Command.Item
+                value="zadzwoń telefon"
+                onSelect={() => {
+                  setOpen(false);
+                  window.location.href = siteConfig.phoneHref;
+                }}
+                className="mt-1 cursor-pointer rounded-lg px-3 py-2 text-sm text-body data-[selected=true]:bg-surface-hover data-[selected=true]:text-heading"
+              >
+                Zadzwoń: {siteConfig.phoneDisplay}
+              </Command.Item>
+              <Command.Item
+                value="whatsapp"
+                onSelect={() => {
+                  setOpen(false);
+                  window.open(siteConfig.whatsapp, "_blank", "noopener,noreferrer");
+                }}
+                className="mt-1 cursor-pointer rounded-lg px-3 py-2 text-sm text-body data-[selected=true]:bg-surface-hover data-[selected=true]:text-heading"
+              >
+                Napisz na WhatsApp
               </Command.Item>
             </Command.Group>
           </Command.List>
