@@ -1,73 +1,75 @@
 import { Resend } from "resend";
 import { budgetLabels, moduleLabel, timelineLabels } from "@/lib/brief-copy";
-import { daysLabel, formatPln } from "@/lib/utils";
+import { clientInquiryMail, ownerInquiryMail, type InquiryMailModel } from "@/lib/inquiry-mail";
 import { siteConfig } from "@/lib/site";
+import { daysLabel, formatPln } from "@/lib/utils";
 import type { InquiryRecord } from "@/types/inquiry";
+
+const studioFrom = "GrygielStudio <kontakt@grygielstudio.com>";
 
 export async function sendInquiryEmail(
   record: InquiryRecord,
-): Promise<{ sent: boolean; reason?: "missing-key" | "error" }> {
+): Promise<{ sent: boolean; confirmed: boolean; reason?: "missing-key" | "error" }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (!apiKey) return { sent: false, reason: "missing-key" };
+  if (!apiKey) return { sent: false, confirmed: false, reason: "missing-key" };
 
   const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL?.trim() || "GrygielStudio <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM_EMAIL?.trim() || studioFrom;
   const to = process.env.INQUIRY_TO_EMAIL?.trim() || siteConfig.email;
-  const modules =
-    record.modules.length > 0 ? record.modules.map((id) => moduleLabel(id)).join(", ") : "bez dodatków";
-  const company = record.company.trim() || "osoba prywatna";
-  const range = `${daysLabel(record.estimate.daysMin, record.estimate.daysMax)}, ${formatPln(record.estimate.costMin)} – ${formatPln(record.estimate.costMax)}`;
+  const model = mailModel(record);
 
+  const owner = ownerInquiryMail(model);
   const { error } = await resend.emails.send({
     from,
     to,
     replyTo: record.email,
-    subject: `Brief: ${company} — ${record.estimate.label}`,
-    text: [
-      `Imię: ${record.name}`,
-      `Firma: ${company}`,
-      `E-mail: ${record.email}`,
-      `Pakiet: ${record.estimate.label}`,
-      `Dodatki: ${modules}`,
-      `W cenie: ${record.estimate.included.join(", ")}`,
-      `Budżet klienta: ${budgetLabels[record.budget]}`,
-      `Termin: ${timelineLabels[record.timeline]}${record.estimate.rush ? ` (ekspres, dopłata ${formatPln(record.estimate.rushFeeMin)} – ${formatPln(record.estimate.rushFeeMax)})` : ""}`,
-      `Szacunek: ${range}`,
-      "",
-      record.message,
-    ].join("\n"),
+    subject: `Nowe zapytanie: ${model.company} — ${model.packageLabel}`,
+    html: owner.html,
+    text: owner.text,
   });
 
   if (error) {
     console.error("Resend inquiry mail failed", error.message);
-    return { sent: false, reason: "error" };
+    return { sent: false, confirmed: false, reason: "error" };
   }
 
-  const confirmation = [
-    "Cześć!",
-    "",
-    "Dzięki za kontakt i przesłanie wstępnej konfiguracji.",
-    "",
-    "Poniżej podsumowanie tego, co zaznaczyłeś w kalkulatorze:",
-    `Pakiet: ${record.estimate.label}`,
-    `Dodatki: ${modules}`,
-    `Orientacyjnie: ${range}${record.estimate.rush ? ` (w tym dopłata za ekspres ${formatPln(record.estimate.rushFeeMin)} – ${formatPln(record.estimate.rushFeeMax)})` : ""}`,
-    "",
-    "Przejrzę to i odezwę się do Ciebie osobiście w ciągu 24h na telefon lub maila, żeby na spokojnie porozmawiać.",
-    "",
-    "– Jakub",
-  ].join("\n");
-
-  const confirmationResult = await resend.emails.send({
+  const client = clientInquiryMail(model);
+  const confirmation = await resend.emails.send({
     from,
     to: record.email,
+    replyTo: to,
     subject: "Dostałem Twoją konfigurację — odezwę się w ciągu 24h",
-    text: confirmation,
+    html: client.html,
+    text: client.text,
   });
 
-  if (confirmationResult.error) {
-    console.error("Resend confirmation failed", confirmationResult.error.message);
+  if (confirmation.error) {
+    console.error("Resend confirmation failed", confirmation.error.message);
+    return { sent: true, confirmed: false };
   }
 
-  return { sent: true };
+  return { sent: true, confirmed: true };
+}
+
+function mailModel(record: InquiryRecord): InquiryMailModel {
+  const modules =
+    record.modules.length > 0 ? record.modules.map((id) => moduleLabel(id)).join(", ") : "bez dodatków";
+  const rush = record.estimate.rush
+    ? `, w tym dopłata za ekspres ${formatPln(record.estimate.rushFeeMin)} – ${formatPln(record.estimate.rushFeeMax)}`
+    : "";
+  return {
+    name: record.name,
+    company: record.company.trim() || "osoba prywatna",
+    email: record.email,
+    message: record.message,
+    packageLabel: record.estimate.label,
+    modules,
+    included: record.estimate.included.join(", "),
+    budget: budgetLabels[record.budget],
+    timeline: `${timelineLabels[record.timeline]}${record.estimate.rush ? " · dopłata 25%" : ""}`,
+    range: `${daysLabel(record.estimate.daysMin, record.estimate.daysMax)}, ${formatPln(record.estimate.costMin)} – ${formatPln(record.estimate.costMax)}${rush}`,
+    phoneDisplay: siteConfig.phoneDisplay,
+    phoneHref: siteConfig.phoneHref,
+    studioEmail: siteConfig.email,
+  };
 }

@@ -43,24 +43,19 @@ export async function sendInquiry(input: unknown): Promise<InquiryActionResult> 
   const stored = await storeInquiry(record);
   const mailed = await sendInquiryEmail(record);
 
-  if (!stored && !mailed.sent && mailed.reason === "error") {
-    return {
-      ok: false,
-      message: "Nie udało się wysłać zapytania. Napisz bezpośrednio na adres e-mail.",
-    };
+  if (mailed.sent) {
+    return { ok: true, delivery: "delivered", confirmation: mailed.confirmed };
   }
 
-  if (!stored && !mailed.sent) {
-    console.info("[inquiry] fallback log", {
-      company: record.company,
-      email: record.email,
-      projectType: record.projectType,
-      days: `${estimate.daysMin}-${estimate.daysMax}`,
-    });
+  if (stored) {
     return { ok: true, delivery: "logged" };
   }
 
-  return { ok: true, delivery: "delivered" };
+  console.info("[inquiry] mail failed", mailed.reason ?? "error");
+  return {
+    ok: false,
+    message: "Nie udało się wysłać zapytania. Napisz bezpośrednio na adres e-mail.",
+  };
 }
 
 async function storeInquiry(record: InquiryRecord): Promise<boolean> {

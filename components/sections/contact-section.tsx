@@ -18,7 +18,7 @@ import { contactFieldsSchema, type ContactFields } from "@/lib/validations/inqui
 export function ContactSection() {
   const { brief } = useBrief();
   const [pending, startTransition] = useTransition();
-  const [sent, setSent] = useState(false);
+  const [sentNote, setSentNote] = useState<string | null>(null);
   const form = useForm<ContactFields>({
     resolver: zodResolver(contactFieldsSchema),
     defaultValues: { name: "", company: "", email: "", message: "", website: "" },
@@ -27,7 +27,7 @@ export function ContactSection() {
   function onSubmit(values: ContactFields) {
     if (values.website) {
       form.reset();
-      setSent(true);
+      setSentNote("Zapytanie przyjęte.");
       return;
     }
     const { website: _website, ...fields } = values;
@@ -38,8 +38,17 @@ export function ContactSection() {
         return;
       }
       form.reset();
-      setSent(true);
-      toast.success("Zapytanie przyjęte. Odezwę się osobiście w ciągu 24 godzin.");
+      if (result.delivery === "logged") {
+        const note = `Zapytanie zapisane, ale mail nie wyszedł. Napisz też na ${siteConfig.email}.`;
+        setSentNote(note);
+        toast.error(note);
+        return;
+      }
+      const note = result.confirmation
+        ? "Zapytanie przyjęte. Podsumowanie poszło też na Twój e-mail. Odezwę się osobiście w ciągu 24 godzin."
+        : "Zapytanie doszło do mnie. Potwierdzenie na Twój adres nie wyszło — odezwę się i tak w ciągu 24 godzin.";
+      setSentNote(note);
+      toast.success(note);
     });
   }
 
@@ -72,10 +81,9 @@ export function ContactSection() {
           className="space-y-4 rounded-2xl border border-line bg-surface p-5 sm:p-6"
           {...reveal(80)}
         >
-          {sent ? (
+          {sentNote ? (
             <p role="status" className="rounded-xl border border-cobalt/20 bg-[#e8f2ec] px-3 py-3 text-sm leading-6 text-heading">
-              Zapytanie przyjęte. Dzięki za kontakt — przejrzę konfigurację i odezwę się osobiście w ciągu 24 godzin,
-              na telefon albo maila.
+              {sentNote}
             </p>
           ) : (
             <p className="rounded-xl border border-line bg-obsidian px-3 py-3 text-sm leading-6 text-body">

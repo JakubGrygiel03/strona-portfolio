@@ -45,5 +45,6 @@ export interface InquiryRecord extends InquiryInput {
 }
 
 export type InquiryActionResult =
-  | { ok: true; delivery: "delivered" | "logged" }
+  | { ok: true; delivery: "delivered"; confirmation: boolean }
+  | { ok: true; delivery: "logged" }
   | { ok: false; message: string };
