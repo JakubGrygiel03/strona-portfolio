@@ -14,11 +14,7 @@ export default async function CaseStudyOg({ params }: { params: Promise<{ slug: 
 
   return new ImageResponse(
     (
-      <OgCard
-        kicker={project?.highlightMetric ?? "Case study"}
-        title={project?.title ?? "Projekt"}
-        detail={project?.client ?? "Portfolio"}
-      />
+      <OgCard kicker={project?.highlightMetric ?? "Case study"} title={project?.title ?? "Projekt"} />
     ),
     { ...size, fonts },
   );

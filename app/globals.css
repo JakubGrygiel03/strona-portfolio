@@ -34,7 +34,6 @@ html {
 body {
   background: #f3f6f4;
   color: #404040;
-  overflow-x: clip;
 }
 
 ::selection {

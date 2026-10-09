@@ -1,14 +1,4 @@
-export function OgCard({
-  kicker,
-  title,
-  detail,
-  domain,
-}: {
-  kicker: string;
-  title: string;
-  detail: string;
-  domain?: string;
-}) {
+export function OgCard({ kicker, title }: { kicker: string; title: string }) {
   return (
     <div
       style={{
@@ -53,10 +43,6 @@ export function OgCard({
         >
           {title}
         </div>
-        <div style={{ display: "flex", marginTop: 24, color: "#A3A3A3", fontSize: 28 }}>{detail}</div>
-        {domain ? (
-          <div style={{ display: "flex", marginTop: 28, color: "#FFFFFF", fontSize: 22 }}>{domain}</div>
-        ) : null}
       </div>
     </div>
   );

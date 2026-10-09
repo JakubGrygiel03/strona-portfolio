@@ -18,7 +18,7 @@ const proof = [
 export function Hero() {
   return (
     <section className="relative z-10">
-      <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-16 sm:pt-24">
+      <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-9 sm:pt-14">
         <p className="rise text-sm font-medium text-amber">Przyjmuję projekty na bieżący miesiąc</p>
         <h1
           className="rise mt-5 max-w-4xl text-4xl font-semibold tracking-[-0.03em] text-on-ink sm:text-5xl"

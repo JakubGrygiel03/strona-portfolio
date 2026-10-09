@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { useCommandMenu } from "@/components/layout/command-menu";
 import { StatusBadge } from "@/components/layout/status-badge";
+import { unlockPageScroll } from "@/lib/page-scroll";
 import { siteConfig } from "@/lib/site";
 
 const links = [
@@ -21,15 +23,59 @@ function scrollToSection(event: { preventDefault(): void }, href: string) {
   const node = id ? document.getElementById(id) : null;
   if (!node) return;
   event.preventDefault();
-  node.scrollIntoView({ behavior: "smooth", block: "start" });
-  history.replaceState(history.state, "", href);
+  const top = node.getBoundingClientRect().top + window.scrollY - 76;
+  window.requestAnimationFrame(() => {
+    unlockPageScroll();
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    history.replaceState(history.state, "", href);
+  });
 }
 
 export function Navbar() {
   const { setOpen } = useCommandMenu();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  function closeMenu() {
+    setMenuOpen(false);
+    unlockPageScroll();
+  }
+
+  useEffect(() => {
+    setMenuOpen(false);
+    unlockPageScroll();
+  }, [pathname]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 768px)");
+    function release() {
+      if (!desktop.matches) return;
+      setMenuOpen(false);
+      unlockPageScroll();
+    }
+    desktop.addEventListener("change", release);
+    return () => desktop.removeEventListener("change", release);
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      unlockPageScroll();
+      return;
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      unlockPageScroll();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      unlockPageScroll();
+    };
+  }, [menuOpen]);
+
   return (
+    <>
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
         <Link
@@ -37,6 +83,7 @@ export function Navbar() {
           className="shrink-0 text-[15px] font-medium tracking-[-0.03em] text-on-ink sm:text-base"
           aria-label="Strona główna"
           onClick={(event) => {
+            closeMenu();
             if (window.location.pathname !== "/") return;
             event.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -69,10 +116,10 @@ export function Navbar() {
           </button>
           <button
             type="button"
-            className="inline-flex h-11 cursor-pointer items-center rounded-xl border border-line bg-surface px-3 text-sm text-heading transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt active:scale-95 md:hidden"
+            className="relative z-10 inline-flex h-11 cursor-pointer touch-manipulation items-center rounded-xl border border-line bg-surface px-3 text-sm text-heading transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt active:scale-95 md:hidden"
             aria-expanded={menuOpen}
             aria-controls="menu-mobilne"
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
           >
             {menuOpen ? "Zamknij" : "Menu"}
           </button>
@@ -85,7 +132,7 @@ export function Navbar() {
               key={link.href}
               href={link.href}
               onClick={(event) => {
-                setMenuOpen(false);
+                closeMenu();
                 scrollToSection(event, link.href);
               }}
               className="flex min-h-11 items-center rounded-xl px-2 text-base text-on-ink transition-transform duration-200 active:scale-95"
@@ -96,5 +143,15 @@ export function Navbar() {
         </nav>
       ) : null}
     </header>
+    {menuOpen ? (
+      <button
+        type="button"
+        aria-label="Zamknij menu"
+        tabIndex={-1}
+        className="fixed inset-0 z-30 cursor-pointer touch-manipulation bg-transparent md:hidden"
+        onClick={closeMenu}
+      />
+    ) : null}
+    </>
   );
 }
