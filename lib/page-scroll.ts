@@ -24,3 +24,15 @@ export function unlockPageScroll() {
   const y = Math.abs(Number.parseInt(lockedTop, 10));
   if (Number.isFinite(y)) window.scrollTo(0, y);
 }
+
+export function scrollPageToId(id: string) {
+  unlockPageScroll();
+  const section = document.getElementById(id);
+  if (!section) return;
+  const anchor = section.querySelector("h2, h1, p") ?? section;
+  const header = document.querySelector("header");
+  const bar = header instanceof HTMLElement ? header.offsetHeight : 64;
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const top = anchor.getBoundingClientRect().top + scrollY - bar - 12;
+  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+}

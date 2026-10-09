@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { getAllProjects } from "@/content/projects";
+import { scrollPageToId, unlockPageScroll } from "@/lib/page-scroll";
 import { siteConfig } from "@/lib/site";
 
 interface CommandMenuContextValue {
@@ -69,6 +70,13 @@ function CommandMenu() {
 
   function go(href: string) {
     setOpen(false);
+    unlockPageScroll();
+    const id = href.split("#")[1];
+    if (id && window.location.pathname === "/" && (href.startsWith("/#") || href.startsWith("#"))) {
+      history.replaceState(history.state, "", `/#${id}`);
+      window.setTimeout(() => scrollPageToId(id), 40);
+      return;
+    }
     router.push(href);
   }
 

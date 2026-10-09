@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { useCommandMenu } from "@/components/layout/command-menu";
 import { StatusBadge } from "@/components/layout/status-badge";
-import { unlockPageScroll } from "@/lib/page-scroll";
+import { scrollPageToId, unlockPageScroll } from "@/lib/page-scroll";
 import { siteConfig } from "@/lib/site";
 
 const links = [
@@ -20,15 +20,10 @@ const links = [
 function scrollToSection(event: { preventDefault(): void }, href: string) {
   if (window.location.pathname !== "/") return;
   const id = href.split("#")[1];
-  const node = id ? document.getElementById(id) : null;
-  if (!node) return;
+  if (!id) return;
   event.preventDefault();
-  const top = node.getBoundingClientRect().top + window.scrollY - 76;
-  window.requestAnimationFrame(() => {
-    unlockPageScroll();
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    history.replaceState(history.state, "", href);
-  });
+  history.replaceState(history.state, "", href);
+  window.setTimeout(() => scrollPageToId(id), 40);
 }
 
 export function Navbar() {
